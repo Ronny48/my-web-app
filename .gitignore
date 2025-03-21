@@ -1,0 +1,5 @@
+.env
+OurApp.db
+node_modules/
+OurApp.db-shm
+OurApp.db-wal
