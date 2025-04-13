@@ -64,7 +64,6 @@ app.use(function(req, res, next) {
     }
 
     res.locals.user = req.user
-    console.log(req.user)
 
     next()
 })
@@ -87,6 +86,7 @@ app.get('/logout', (req, res) =>{
     res.clearCookie('ourSimpleApp')
     res.redirect('/')
 })
+
 
 app.post('/login', (req, res) => {
     let errors = []
