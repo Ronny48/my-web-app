@@ -40,24 +40,22 @@ const app = express();
 
 app.use(express.json());
 
-const path = require('path');
+const path = require("path");
 
-const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Use the correct path to your .db file
-const dbPath = path.join(__dirname, 'users.db');
-const db = new Database(dbPath);
+const dbPath = path.join(__dirname, "users.db");
 
 // Debug route to list all users
-app.get('/admin/users', (req, res) => {
+app.get("/admin/users", (req, res) => {
   try {
-    const stmt = db.prepare('SELECT * FROM users'); // Assuming your table is called "users"
+    const stmt = db.prepare("SELECT * FROM users"); // Assuming your table is called "users"
     const users = stmt.all();
     res.json(users);
   } catch (err) {
-    console.error('Error fetching users:', err);
-    res.status(500).json({ error: 'Could not fetch users' });
+    console.error("Error fetching users:", err);
+    res.status(500).json({ error: "Could not fetch users" });
   }
 });
 
@@ -405,5 +403,6 @@ app.get("/admin/users", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server live on port ${PORT}`);
+});
 
 app.listen(3000);
