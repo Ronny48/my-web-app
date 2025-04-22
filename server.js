@@ -366,4 +366,15 @@ app.post("/register", (req, res) => {
   res.redirect("/");
 });
 
+app.get("/admin/users", (req, res) => {
+  try {
+    const stmt = db.prepare("SELECT id, username FROM users");
+    const users = stmt.all();
+    res.json(users);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
 app.listen(3000);
