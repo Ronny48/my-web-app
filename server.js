@@ -392,4 +392,7 @@ app.post("/register", (req, res) => {
   res.redirect("/");
 });
 
+app.listen(PORT, () => {
+  console.log(`Server live on port ${PORT}`);
+
 app.listen(3000);
