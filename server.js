@@ -39,6 +39,21 @@ createTables();
 const app = express();
 
 app.use(express.json());
+
+app.get('/admin/users', (req, res) => {
+  try {
+    const stmt = db.prepare('SELECT * FROM users'); // Assuming your table is called "users"
+    const users = stmt.all();
+    res.json(users);
+  } catch (err) {
+    console.error('Error fetching users:', err);
+    res.status(500).json({ error: 'Could not fetch users' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is live at http://localhost:${PORT}`);
+});
 // database setup ends here
 
 app.set("view engine", "ejs");
