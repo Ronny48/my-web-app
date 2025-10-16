@@ -251,7 +251,7 @@ app.post("/login", (req, res) => {
       userid: userInQuestion.id,
       username: userInQuestion.username,
     },
-    process.env.JWTSECRET
+    process.env.JWT_SECRET
   );
 
   res.cookie("ourSimpleApp", ourTokenValue, {
@@ -457,7 +457,7 @@ app.post("/register", (req, res) => {
       userid: ourUser.id,
       username: ourUser.username,
     },
-    process.env.JWTSECRET
+    process.env.JWT_SECRET
   );
 
   res.cookie("ourSimpleApp", ourTokenValue, {
