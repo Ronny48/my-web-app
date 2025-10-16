@@ -21,16 +21,19 @@
   function createPostNode(post) {
     const container = document.createElement("article");
     container.className = "post";
+    // Build title and body safely:
+    const titleHTML = post.title
+      ? `<strong>${escapeHtml(post.title)}</strong><br>`
+      : "";
+    // preserve newlines in the body by converting to <br>
+    const bodyText = escapeHtml(post.body || "").replace(/\n/g, "<br>");
+
     container.innerHTML = `
       <header class="post-header">
         <div class="post-author">${escapeHtml(post.username || "Unknown")}</div>
         <div class="post-meta">${timeAgo(post.createdDate)}</div>
       </header>
-      <div class="post-body">${
-        escapeHtml(
-          post.title ? "<strong>" + post.title + "</strong><br>" : ""
-        ) + escapeHtml(post.body)
-      }</div>
+      <div class="post-body">${titleHTML}${bodyText}</div>
       <div class="post-actions">
         <button class="button show-comments">Comments</button>
       </div>
