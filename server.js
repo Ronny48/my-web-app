@@ -110,7 +110,7 @@ app.use(function (req, res, next) {
 
   //try to decode incoming cookies
   try {
-    const decode = jwt.verify(req.cookies.ourSimpleApp, process.env.JWTSECRET);
+    const decode = jwt.verify(req.cookies.ourSimpleApp, process.env.JWT_SECRET);
     req.user = decode;
   } catch (err) {
     req.user = false;
