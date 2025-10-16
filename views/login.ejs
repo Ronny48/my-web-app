@@ -1,27 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('includes/head') %>
-<body>
+  <%- include('includes/head', { title: 'Log in — Our wonderful app' }) %>
+  <body>
     <%- include('includes/header') %>
     <main>
-        <form action="/login" method="POST">
-            <% errors.forEach(error => { %>
-                <p class="notice"><%= error %></p>
-            <% }) %>
+      <div class="container page">
+        <section class="card form-card">
+          <h2>Log In</h2>
+          <form action="/login" method="POST" class="signup-form">
+            <% if (errors && errors.length) { %>
+            <div class="errors">
+              <% errors.forEach(error => { %>
+              <p class="notice"><%= error %></p>
+              <% }) %>
+            </div>
+            <% } %>
 
-        <fieldset>
-            <legend>Log In</legend>
-            <label for="username"><small>Username</small></label>
-            <input type="text" name="username" id="username" autocomplete="off">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              autocomplete="off"
+              required
+            />
 
-            <label for="password"><small>Password</small></label>
-            <input type="password" name="password" id="password" autocomplete="off">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              autocomplete="off"
+              required
+            />
 
-            <br />
-            <button>Log In</button>`
-        </fieldset>
-        </form>
+            <div class="form-actions">
+              <button class="button primary">Log In</button>
+              <a href="/" class="button secondary">Back</a>
+            </div>
+          </form>
+        </section>
+      </div>
     </main>
     <%- include('includes/footer') %>
-</body>
+  </body>
 </html>

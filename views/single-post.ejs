@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('includes/head') %>
+<%- include('includes/head', { title: post.title + ' — Our wonderful app' }) %>
 <body>
     <%- include('includes/header') %>
     <main>
-        <h1><%= post.title %></h1>
+        <div class="container page">
+            <article class="card">
+                <h1><%= post.title %></h1>
+                <small class="muted">Posted by <%= post.username %> on <%= new Date(post.createdDate).toLocaleDateString() %></small>
+                <div class="post-body">
+                    <%- filterUserHTML(post.body) %>
+                </div>
 
-        <article>
-            <small>Posted by <%= post.username %> on <%= new Date(post.createdDate).getMonth() + 1 %>/<%= new Date(post.createdDate).getDate() %>/<%= new Date(post.createdDate).getFullYear() %></small>
-            <div>
-                <%- filterUserHTML(post.body) %>
-            </div>
-        </article>
-        <% if (isAuthor) { %>
-            <a href="/edit-post/<%= post.id %> " class = 'button'>Edit Post</a>
-
-        <form style = 'display: inline;' action="/delete-post/<%= post.id %>" method="POST">
-            <button>Delete Post</button>
-        </form>
-        <% } %>
-        
+                <% if (isAuthor) { %>
+                    <div class="form-actions" style="margin-top:1rem">
+                        <a href="/edit-post/<%= post.id %>" class="button">Edit Post</a>
+                        <form style="display:inline" action="/delete-post/<%= post.id %>" method="POST">
+                            <button class="button secondary">Delete Post</button>
+                        </form>
+                    </div>
+                <% } %>
+            </article>
+        </div>
     </main>
     <%- include('includes/footer') %>
-</body>
 </html>

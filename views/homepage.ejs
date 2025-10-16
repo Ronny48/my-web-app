@@ -1,27 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('includes/head') %>
-<body>
+  <%- include('includes/head', { title: 'Sign up — Our wonderful app' }) %>
+  <body>
     <%- include('includes/header') %>
     <main>
-        <form action="/register" method="POST">
-            <% errors.forEach(error => { %>
-                <p class="notice"><%= error %></p>
-            <% }) %>
+      <div class="container page">
+        <section class="card form-card">
+          <h2>Create an account</h2>
 
-        <fieldset>
-            <legend>Create an account</legend>
-            <label for="username"><small>Username</small></label>
-            <input type="text" name="username" id="username" autocomplete="off">
+          <form action="/register" method="POST" class="signup-form">
+            <% if (errors && errors.length) { %>
+            <div class="errors">
+              <% errors.forEach(error => { %>
+              <p class="notice"><%= error %></p>
+              <% }) %>
+            </div>
+            <% } %>
 
-            <label for="password"><small>Password</small></label>
-            <input type="password" name="password" id="password" autocomplete="off">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              autocomplete="off"
+              required
+            />
 
-            <br />
-            <button>Sign Up</button>
-        </fieldset>
-        </form>
+            <label for="password">Password</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              autocomplete="off"
+              required
+            />
+
+            <div class="form-actions">
+              <button class="button primary">Sign Up</button>
+              <a href="/login" class="button secondary"
+                >Already have an account?</a
+              >
+            </div>
+          </form>
+        </section>
+      </div>
     </main>
     <%- include('includes/footer') %>
-</body>
+  </body>
 </html>

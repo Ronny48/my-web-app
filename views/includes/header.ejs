@@ -1,12 +1,46 @@
-<header>
-    <h2><a href="/">Our wonderful app</a></h2>
-    <nav>
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <a href="/" class="brand-link" aria-label="Our wonderful app">
+        <img src="/images/logo.svg" alt="Our logo" class="brand-logo" />
+        <div class="brand-text">
+          <h1>Our wonderful app</h1>
+          <p class="tagline">Write, share and connect</p>
+        </div>
+      </a>
+    </div>
+
+    <button
+      class="nav-toggle"
+      aria-controls="primary-navigation"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="hamburger"></span>
+    </button>
+
+    <div class="theme-switcher">
+      <label for="theme-select" class="visually-hidden">Choose theme</label>
+      <select id="theme-select" aria-label="Choose color theme">
+        <option value="blue">Blue</option>
+        <option value="warm">Warm</option>
+        <option value="dark">Dark</option>
+      </select>
+    </div>
+
+    <nav id="primary-navigation" class="main-nav" aria-label="Main navigation">
+      <ul>
+        <li><a href="/">Home</a></li>
         <% if (user) { %>
-            <a href="/create-post">Create Post</a>
-            <a href="/logout">Log Out</a>
+        <li><a href="/create-post">Create Post</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/logout">Log Out</a></li>
         <% } else { %>
-            <a href="/login">Log In</a>
+        <li><a href="/login">Log In</a></li>
         <% } %>
-        
+      </ul>
     </nav>
+  </div>
 </header>
+
+<script src="/scripts.js" defer></script>

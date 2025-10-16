@@ -32,6 +32,20 @@ const createTables = db.transaction(() => {
         )       
         `
   ).run();
+  db.prepare(
+    `
+        CREATE TABLE IF NOT EXISTS comments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            postId INTEGER NOT NULL,
+            authorId INTEGER,
+            authorName TEXT,
+            content TEXT NOT NULL,
+            createdAt TEXT,
+            FOREIGN KEY (authorId) REFERENCES users (id),
+            FOREIGN KEY (postId) REFERENCES posts (id)
+        )
+        `
+  ).run();
 });
 
 createTables();
@@ -42,7 +56,7 @@ app.use(express.json());
 
 const path = require("path");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 // Use the correct path to your .db file
 const dbPath = path.join(__dirname, "users.db");
@@ -57,10 +71,6 @@ app.get("/admin/users", (req, res) => {
     console.error("Error fetching users:", err);
     res.status(500).json({ error: "Could not fetch users" });
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is live at http://localhost:${PORT}`);
 });
 
 // database setup ends here
@@ -121,6 +131,76 @@ app.get("/", (req, res) => {
   }
 
   res.render("homepage");
+});
+
+// New public dashboard: feed of all posts (like a feed with comments)
+app.get("/dashboard", (req, res) => {
+  res.render("feed");
+});
+
+// API: fetch all posts (with author names)
+app.get("/api/posts", (req, res) => {
+  try {
+    const stmt = db.prepare(
+      "SELECT posts.*, users.username FROM posts INNER JOIN users ON posts.authorId = users.id ORDER BY createdDate DESC"
+    );
+    const posts = stmt.all();
+    res.json(posts);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "could not fetch posts" });
+  }
+});
+
+// API: get comments for a post
+app.get("/api/posts/:id/comments", (req, res) => {
+  try {
+    const stmt = db.prepare(
+      "SELECT * FROM comments WHERE postId = ? ORDER BY createdAt ASC"
+    );
+    const comments = stmt.all(req.params.id);
+    res.json(comments);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "could not fetch comments" });
+  }
+});
+
+// API: add comment to a post
+app.post("/api/posts/:id/comments", (req, res) => {
+  try {
+    const postId = Number(req.params.id);
+    const content = String(req.body.content || "").trim();
+    if (!content) return res.status(400).json({ error: "empty" });
+
+    const authorId = req.user ? req.user.userid : null;
+    const authorName = req.user
+      ? req.user.username
+      : req.body.authorName || "Anonymous";
+
+    const insert = db.prepare(
+      "INSERT INTO comments (postId, authorId, authorName, content, createdAt) VALUES (?, ?, ?, ?, ?)"
+    );
+    const result = insert.run(
+      postId,
+      authorId,
+      authorName,
+      content,
+      new Date().toISOString()
+    );
+
+    res.json({
+      id: result.lastInsertRowid,
+      postId,
+      authorId,
+      authorName,
+      content,
+      createdAt: new Date().toISOString(),
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "could not save comment" });
+  }
 });
 
 app.get("/login", (req, res) => {
@@ -401,8 +481,30 @@ app.get("/admin/users", (req, res) => {
   }
 });
 
+// Secure endpoint for Render Cron (or other schedulers) to trigger a GET to API_URL
+app.get("/cron/ping", (req, res) => {
+  const secret = req.header("X-Cron-Secret");
+  if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
+    return res.status(403).send("forbidden");
+  }
+
+  // perform the GET
+  const https = require("https");
+  https
+    .get(process.env.API_URL, (r) => {
+      if (r.statusCode === 200) {
+        console.log("GET request sent successfully");
+        return res.status(200).send("ok");
+      }
+      console.log("GET request failed", r.statusCode);
+      return res.status(502).send("bad gateway");
+    })
+    .on("error", (e) => {
+      console.error("Error while sending request", e);
+      return res.status(500).send("error");
+    });
+});
+
 app.listen(PORT, () => {
   console.log(`Server live on port ${PORT}`);
 });
-
-app.listen(3000);

@@ -1,27 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('includes/head') %>
-<body>
+  <%- include('includes/head', { title: 'Create post — Our wonderful app' }) %>
+  <body>
     <%- include('includes/header') %>
     <main>
-        <form action="/create-post" method="POST">
-            <% errors.forEach(error => { %>
-                <p class="notice"><%= error %></p>
-            <% }) %>
+      <div class="container page">
+        <section class="card form-card">
+          <h2>Create a new post</h2>
+          <form action="/create-post" method="POST" class="signup-form">
+            <% if (errors && errors.length) { %>
+            <div class="errors">
+              <% errors.forEach(error => { %>
+              <p class="notice"><%= error %></p>
+              <% }) %>
+            </div>
+            <% } %>
 
-        <fieldset>
-            <legend>Creat A New Post</legend>
-            <label for="title"><small>Title</small></label>
-            <input type="text" name="title" id="title" autocomplete="off">
+            <label for="title">Title</label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              autocomplete="off"
+              required
+            />
 
-            <label for="body"><small>Content</small></label>
-            <textarea name="body" id="body"></textarea>
+            <label for="body">Content</label>
+            <textarea name="body" id="body" rows="8" required></textarea>
 
-            <br />
-            <button>Save New Post</button>
-        </fieldset>
-        </form>
+            <div class="form-actions">
+              <button class="button primary">Save New Post</button>
+              <a href="/" class="button secondary">Cancel</a>
+            </div>
+          </form>
+        </section>
+      </div>
     </main>
     <%- include('includes/footer') %>
-</body>
+  </body>
 </html>

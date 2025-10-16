@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('includes/head') %>
+<%- include('includes/head', { title: 'Dashboard — Our wonderful app' }) %>
 
 <body>
     <%- include('includes/header') %>
     <main>
-        <% if (posts.length == 0) { %>
-        <h4>Hello <%= user.username %>, You've got no posts yet</h4>
-        <% } else { %>
-        <h4>Hello <%= user.username %>, here are your posts</h4>
-        <% } %>
-         
-        <ul>
-            <% posts.forEach(post => { %>
-                <li><a href="/post/<%= post.id %>"><%= post.title %></a> on <%= new Date(post.createdDate).getMonth() + 1 %>/<%= new Date(post.createdDate).getDate() %>/<%= new Date(post.createdDate).getFullYear() %></li>
-            <% }) %>
-        </ul>
+        <div class="container page">
+            <section class="card">
+                <% if (!posts || posts.length == 0) { %>
+                    <h3>Hello <%= user.username %>, you've got no posts yet</h3>
+                    <p><a href="/create-post" class="button primary">Create your first post</a></p>
+                <% } else { %>
+                    <h3>Hello <%= user.username %>, here are your posts</h3>
+                    <ul class="post-list">
+                        <% posts.forEach(post => { %>
+                            <li>
+                                <a href="/post/<%= post.id %>"><%= post.title %></a>
+                                <small class="muted"> — <%= new Date(post.createdDate).toLocaleDateString() %></small>
+                            </li>
+                        <% }) %>
+                    </ul>
+                <% } %>
+            </section>
+        </div>
     </main>
     <%- include('includes/footer') %>
 </html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('includes/head', { title: 'Feed — Our wonderful app' }) %>
+  <body>
+    <%- include('includes/header') %>
+    <main>
+      <div class="container page">
+        <section class="card feed-card">
+          <h2>Feed</h2>
+          <div id="feed" class="feed-list">
+            <p class="muted">Loading...</p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <%- include('includes/footer') %>
+    <script src="/dashboard.js" defer></script>
+  </body>
+</html>
