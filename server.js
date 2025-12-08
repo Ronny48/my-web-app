@@ -505,6 +505,10 @@ app.get("/cron/ping", (req, res) => {
     });
 });
 
+app.get('/health',(res,req)=>{
+  res.send('Successful Ping')
+})
+
 app.listen(PORT, () => {
   console.log(`Server live on port ${PORT}`);
 });
