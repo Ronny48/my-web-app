@@ -73,9 +73,9 @@ app.get("/admin/users", (req, res) => {
   }
 });
 
-app.get('/health',(res,req)=>{
+app.get('/health', (req,res) => {
   res.send('Successful Ping')
-})
+});
 // database setup ends here
 
 app.set("view engine", "ejs");
