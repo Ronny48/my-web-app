@@ -73,6 +73,9 @@ app.get("/admin/users", (req, res) => {
   }
 });
 
+app.get('/health',(res,req)=>{
+  res.send('Successful Ping')
+})
 // database setup ends here
 
 app.set("view engine", "ejs");
@@ -505,9 +508,7 @@ app.get("/cron/ping", (req, res) => {
     });
 });
 
-app.get('/health',(res,req)=>{
-  res.send('Successful Ping')
-})
+
 
 app.listen(PORT, () => {
   console.log(`Server live on port ${PORT}`);
